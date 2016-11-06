@@ -7,7 +7,6 @@ class AppController : NSObject, NSApplicationDelegate {
     var targetDate: Date?
 
     func applicationDidFinishLaunching(_ n: Notification) {
-        let app = NSApp
         let s = NSStatusBar.system()
         let item = s.statusItem(withLength: NSVariableStatusItemLength)
         self.statusItem = item
@@ -15,11 +14,26 @@ class AppController : NSObject, NSApplicationDelegate {
             button.title = "Tide"
         }
         let menu = NSMenu()
-        menu.addItem(NSMenuItem(title: "25 minutes", action: #selector(start(_:)), keyEquivalent: "q"))
-        menu.addItem(NSMenuItem(title: "5 minutes", action: #selector(start(_:)), keyEquivalent: "q"))
-        menu.addItem(NSMenuItem(title: "Quit", action: #selector(app?.terminate(_:)), keyEquivalent: "q"))
+
+        menu.addItem(NSMenuItem(title: "25 minutes", action: #selector(start(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "5 minutes", action: #selector(start(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Cancel", action: #selector(cancel), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Quit", action: #selector(quit), keyEquivalent: "q"))
 
         item.menu = menu
+        update()
+    }
+
+    func cancel(_ item: NSMenuItem?) {
+        timer?.invalidate()
+        timer = nil
+        targetDate = nil
+        update()
+    }
+
+    func quit() {
+        let app = NSApp
+        app?.terminate(self)
     }
 
     func start(_ item: NSMenuItem?) {
@@ -43,22 +57,24 @@ class AppController : NSObject, NSApplicationDelegate {
 
             timer = Timer.scheduledTimer(timeInterval: 1, // fires every second
                                          target: self,
-                                         selector: #selector(fire),
+                                         selector: #selector(update),
                                          userInfo: nil,
                                          repeats: true)
-            fire()
+            update()
         }
-
     }
 
-    func fire() {
+    func update() {
         let now = Date.init()
         if let d = targetDate?.timeIntervalSince(now) {
             let di = Int(d)
+            let m  = di / 60
+            let s  = di % 60
+            let ss: String = { if (s < 10) { return "0\(s)" } else { return "\(s)" } }()
 
             if (d > 0) {
                 if let button = statusItem?.button {
-                    button.title = "\(di)"
+                    button.title = "\(m):\(ss)"
                 }
             } else {
 
