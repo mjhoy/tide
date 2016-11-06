@@ -1,4 +1,10 @@
 tide
 ====
 
-a stupid pomodoro timer for the OSX menu bar.
+a stupid pomodoro timer for the OSX menu bar
+
+
+BUILDING
+        Run `make`. Requires Xcode.app be installed and at least
+        10.12. I think. Then run ./tide. A wild menu appears. Click on
+        it and choose Quit to quit.
