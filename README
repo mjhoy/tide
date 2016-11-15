@@ -5,6 +5,5 @@ a stupid pomodoro timer for the OSX menu bar
 
 
 BUILDING
-        Run `make`. Requires Xcode.app be installed and at least
-        10.12. I think. Then run ./tide. A wild menu appears. Click on
-        it and choose Quit to quit.
+        Open the project in Xcode.app. Requires 10.12, I think.
+        Build & run. A wild menu item appears.
